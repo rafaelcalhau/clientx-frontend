@@ -14,8 +14,6 @@ import { useRouter } from 'next/navigation'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { FormErrorText } from "@/components/FormErrorText"
 import { PageContainer } from "@/components/PageContainer"
-import { APIRoutes } from "@/shared/api.routes"
-import { clientAPI } from "@/services/api"
 
 import type { SignInInputs } from "./signin.interfaces"
 
@@ -29,22 +27,22 @@ const SignInPage = () => {
     setIsAuthenticating(true)
     setAuthenticationError('')
 
-    const signin = await clientAPI
-      .post(APIRoutes.signin, data)
+    const signin = await fetch('/api/signin', { method: 'POST', body: JSON.stringify(data) })
+      .then(result => result.json())
       .finally(() => setIsAuthenticating(false))
     
     if (signin?.message) {
       setAuthenticationError(signin.message)
       resetField('password')
     } else {
-      router.push('/dashboard')
+      router.push('/')
     }
   }
 
   return (
     <PageContainer title="Sign In">
       <div className="flex flex-col items-center justify-center w-72">
-        <Image alt="Logo" src="/logo-clientx.png" width={200} height={127.6} />
+        <Image alt="Logo" src="/logo-clientx.png" width={200} height={128} priority />
         <div className="flex flex-col mt-6 mb-6">
           <h2 className="h1">Sign in to your account</h2>
           <p>Welcome back</p>

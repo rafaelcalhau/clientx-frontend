@@ -1,8 +1,8 @@
+import { getServerAuthSession } from "@/modules/auth/auth.utils"
 import { redirect } from "next/navigation"
-import { getAuthSession } from "./signin/signin.utils"
 
 export default async function Home () {
-  const session = getAuthSession()
+  const session = getServerAuthSession()
   if (!session) return redirect('/signin')
 
   return redirect('/dashboard')
