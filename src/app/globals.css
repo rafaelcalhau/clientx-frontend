@@ -47,6 +47,11 @@ h1, h2, h3, h4, h5, h6 {
   --background-end-rgb: 255, 255, 255;
 }
 
+a {
+  color: #555555;
+  text-decoration: none;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
