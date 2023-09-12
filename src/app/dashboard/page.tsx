@@ -1,4 +1,4 @@
-import { withAuthorization } from "@/shared/withAuthorization"
+import { withAuthorization } from "@/modules/auth/withAuthorization"
 import { DashboardPage } from "./DashboardPage"
 
 const PrivatePage = () => withAuthorization(DashboardPage)
