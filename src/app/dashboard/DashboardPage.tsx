@@ -26,7 +26,7 @@ const DashboardBreadcrumbs = () => (
       <span>Dashboard</span>
     </Link>
     <Typography color="primary" fontWeight={500} fontSize={12}>
-      Clients
+      Overview
     </Typography>
   </Breadcrumbs>
 )

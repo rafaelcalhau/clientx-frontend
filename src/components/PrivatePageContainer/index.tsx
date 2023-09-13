@@ -1,5 +1,6 @@
 import { FC, PropsWithChildren, ReactNode } from "react"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { CssBaseline, CssVarsProvider } from "@mui/joy"
 import Button from "@mui/joy/Button"
 import { logout } from "@/app/actions"
@@ -9,6 +10,7 @@ import ListItemButton from "@mui/joy/ListItemButton"
 import ListItemContent from "@mui/joy/ListItemContent"
 import ListItemDecorator from "@mui/joy/ListItemDecorator"
 import { theme } from "@/theme/default"
+import { NavigationMenuItem } from "./components/NavigationMenuItem"
 
 // icons
 import BubbleChartIcon from '@mui/icons-material/BubbleChart';
@@ -26,6 +28,8 @@ export const PrivatePageContainer: FC<PropsWithChildren<PrivatePageContainerProp
   children,
   heading,
 }) => {
+  const router = useRouter()
+
   return (
     <CssVarsProvider theme={theme}>
       <CssBaseline />
@@ -39,47 +43,34 @@ export const PrivatePageContainer: FC<PropsWithChildren<PrivatePageContainerProp
                 '--List-gap': '6px',
               }}
             >
-              <ListItem>
-                <ListItemButton>
-                  <ListItemDecorator>
-                    <BubbleChartIcon />
-                  </ListItemDecorator>
-                  <ListItemContent>Overview</ListItemContent>
-                </ListItemButton>
-              </ListItem>
-              <ListItem>
-                <ListItemButton>
-                  <ListItemDecorator>
-                    <InsertChartIcon />
-                  </ListItemDecorator>
-                  <ListItemContent>Analytics</ListItemContent>
-                </ListItemButton>
-              </ListItem>
-              <ListItem>
-                <ListItemButton selected>
-                  <ListItemDecorator>
-                    <ShoppingCartIcon />
-                  </ListItemDecorator>
-                  <ListItemContent>Orders</ListItemContent>
-                </ListItemButton>
-              </ListItem>
-              <ListItem>
-                <ListItemButton>
-                  <ListItemDecorator>
-                    <StarsIcon />
-                  </ListItemDecorator>
-                  <ListItemContent>Saved reports</ListItemContent>
-                </ListItemButton>
-              </ListItem>
-              <ListItem>
-                <ListItemButton>
-                  <ListItemDecorator>
-                    <AccountBoxIcon />
-                  </ListItemDecorator>
-                  <ListItemContent>User reports</ListItemContent>
-                </ListItemButton>
-              </ListItem>
+              <NavigationMenuItem
+                selected
+                name="Overview"
+                icon={<BubbleChartIcon />}
+                onClick={() => router.push('/dashboard')}
+              />
+              <NavigationMenuItem
+                name="Analytics"
+                icon={<InsertChartIcon />}
+                onClick={() => router.push('/dashboard')}
+              />
+              <NavigationMenuItem
+                name="Orders"
+                icon={<ShoppingCartIcon />}
+                onClick={() => router.push('/dashboard')}
+              />
+              <NavigationMenuItem
+                name="Reports"
+                icon={<StarsIcon />}
+                onClick={() => router.push('/dashboard')}
+              />
+              <NavigationMenuItem
+                name="Settings"
+                icon={<AccountBoxIcon />}
+                onClick={() => router.push('/dashboard')}
+              />
             </List>
+
             <Image alt="Logo" src="/logo-clientx.png" width={60} height={38.4} priority />
           </div>
         </div>

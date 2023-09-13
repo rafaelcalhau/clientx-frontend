@@ -13,7 +13,7 @@ import Image from "next/image"
 import { useRouter } from 'next/navigation'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { FormErrorText } from "@/components/FormErrorText"
-import { PageContainer } from "@/components/PageContainer"
+import { PublicPageContainer } from "@/components/PublicPageContainer"
 
 import type { SignInInputs } from "./signin.interfaces"
 
@@ -40,7 +40,7 @@ const SignInPage = () => {
   }
 
   return (
-    <PageContainer title="Sign In">
+    <PublicPageContainer title="Sign In">
       <div className="flex flex-col items-center justify-center w-72">
         <Image alt="Logo" src="/logo-clientx.png" width={200} height={128} priority />
         <div className="flex flex-col mt-6 mb-6">
@@ -82,7 +82,7 @@ const SignInPage = () => {
       <div className="text-sm">
         &copy; <a href="https://github.com/rafaelcalhau" target="_blank">github.com/rafaelcalhau</a>
       </div>
-    </PageContainer>
+    </PublicPageContainer>
   )
 }
 
