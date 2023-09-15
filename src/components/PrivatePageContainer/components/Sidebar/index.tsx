@@ -2,7 +2,7 @@ import Image from "next/image"
 import { useRouter } from "next/navigation"
 import List from "@mui/joy/List"
 import { ROUTES } from "@/app/routes"
-import { SidebarItem } from "./SidebarItem"
+import { SidebarItem } from "../SidebarItem"
 
 // icons
 import BubbleChartIcon from '@mui/icons-material/BubbleChart'

@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { sidebarNavigationOptions, Sidebar } from "./Sidebar"
+import { sidebarNavigationOptions, Sidebar } from "./index"
 
 const pushMock = jest.fn()
 jest.mock("next/navigation", () => ({

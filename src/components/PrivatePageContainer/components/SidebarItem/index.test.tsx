@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import BubbleChartIcon from "@mui/icons-material/BubbleChart"
-import { SidebarItem } from "./SidebarItem"
+import { SidebarItem } from "./index"
 
 describe("Component <SidebarItem />", () => {
   const itemName = 'Clients'
