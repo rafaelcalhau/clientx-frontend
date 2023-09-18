@@ -1,9 +1,8 @@
 import { FC, PropsWithChildren, ReactNode } from "react"
 import { CssBaseline, CssVarsProvider } from "@mui/joy"
-import Button from "@mui/joy/Button"
-import { logout } from "@/app/actions"
 import { theme } from "@/theme/default"
 import { Sidebar } from "./components/Sidebar"
+import { UserMenu } from "./components/UserMenu"
 
 interface PrivatePageContainerProps {
   breadcrumbs: ReactNode
@@ -17,15 +16,14 @@ export const PrivatePageContainer: FC<PropsWithChildren<PrivatePageContainerProp
   return (
     <CssVarsProvider theme={theme}>
       <CssBaseline />
+
       <div className="flex min-h-screen">
         <Sidebar />
 
         <div className="flex flex-col flex-grow min-h-screen">
           <div className="flex border-solid border-0 border-b border-slate-200 p-4 items-center justify-between">
             {breadcrumbs}
-            <form action={logout}>
-              <Button variant="plain" type="submit" size="sm">Logout</Button>
-            </form>
+            <UserMenu userName="Rafael" />
           </div>
 
           <div className="container mx-auto">
@@ -38,6 +36,5 @@ export const PrivatePageContainer: FC<PropsWithChildren<PrivatePageContainerProp
         </div>
       </div>
     </CssVarsProvider>
-    
   )
 }
