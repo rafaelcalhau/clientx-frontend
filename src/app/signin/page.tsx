@@ -18,25 +18,32 @@ import { PublicPageContainer } from "@/components/PublicPageContainer"
 import type { SignInInputs } from "./signin.interfaces"
 
 const SignInPage = () => {
-  const router = useRouter();
-  const { register, handleSubmit, formState: { errors }, resetField } = useForm<SignInInputs>()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    resetField,
+  } = useForm<SignInInputs>()
+
+  const router = useRouter()
   const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false)
   const [authenticationError, setAuthenticationError] = useState<string>("")
 
-  const onSubmit: SubmitHandler<SignInInputs> = async data => {
+  const onSubmit: SubmitHandler<SignInInputs> = data => {
     setIsAuthenticating(true)
     setAuthenticationError('')
 
-    const signin = await fetch('/api/signin', { method: 'POST', body: JSON.stringify(data) })
+    fetch('/api/signin', { method: 'POST', body: JSON.stringify(data) })
       .then(result => result.json())
+      .then(data => {
+        if (data?.message) {
+          setAuthenticationError(data.message)
+          resetField('password')
+        } else {
+          router.push('/')
+        }
+      })
       .finally(() => setIsAuthenticating(false))
-    
-    if (signin?.message) {
-      setAuthenticationError(signin.message)
-      resetField('password')
-    } else {
-      router.push('/')
-    }
   }
 
   return (
