@@ -1,6 +1,7 @@
 import { FC, PropsWithChildren, ReactNode } from "react"
 import { CssBaseline, CssVarsProvider } from "@mui/joy"
 import { UserSession } from "@/modules/auth/auth.interfaces"
+import { getFirstName } from "@/shared/utils/getFirstName"
 import { theme } from "@/theme/default"
 import { Sidebar } from "./components/Sidebar"
 import { UserMenu } from "./components/UserMenu"
@@ -26,7 +27,7 @@ export const PrivatePageContainer: FC<PropsWithChildren<PrivatePageContainerProp
         <div className="flex flex-col flex-grow min-h-screen">
           <div className="flex border-solid border-0 border-b border-slate-200 p-4 items-center justify-between">
             {breadcrumbs}
-            <UserMenu userName={session.name} />
+            <UserMenu userName={getFirstName(session.name)} />
           </div>
 
           <div className="container mx-auto">
