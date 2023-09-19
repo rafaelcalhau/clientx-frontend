@@ -1,9 +1,15 @@
-const makeHttpHeaders = (headerOptions?: HeadersInit) => {
+import { FetcherOptions } from "@/shared/interfaces";
+
+const makeHttpHeaders = (fetchOptions?: FetcherOptions) => {
   const headers = new Headers({
-    ...headerOptions,
     'Accept': '*/*',
     'Content-Type': 'application/json',
   })
+
+  if (fetchOptions?.accessToken) {
+    headers.set('Authorization', fetchOptions.accessToken)
+  }
+
   return headers
 }
 
@@ -14,8 +20,8 @@ const makeUrl = (url: string) => {
 }
 
 export const clientAPI = {
-  delete: async (url: string, headerOptions?: HeadersInit) => {
-    const headers = makeHttpHeaders(headerOptions)
+  delete: async (url: string, fetchOptions?: FetcherOptions) => {
+    const headers = makeHttpHeaders(fetchOptions)
     return fetch(makeUrl(url), { method: 'DELETE', headers })
       .then(res => res.json())
       .catch(err => {
@@ -23,8 +29,8 @@ export const clientAPI = {
         return null
       })
   },
-  get: async (url: string, headerOptions?: HeadersInit) => {
-    const headers = makeHttpHeaders(headerOptions)
+  get: async (url: string, fetchOptions?: FetcherOptions) => {
+    const headers = makeHttpHeaders(fetchOptions)
     return fetch(makeUrl(url), { method: 'GET', headers })
       .then(res => res.json())
       .catch(err => {
@@ -32,8 +38,8 @@ export const clientAPI = {
         return null
       })
   },
-  post: async (url: string, data: Record<string, any>, headerOptions?: HeadersInit) => {
-    const headers = makeHttpHeaders(headerOptions)
+  post: async (url: string, data: Record<string, any>, fetchOptions?: FetcherOptions) => {
+    const headers = makeHttpHeaders(fetchOptions)
     return fetch(makeUrl(url), { method: 'POST', headers, body: JSON.stringify(data) })
       .then(res => res.json())
       .catch(err => {
@@ -41,8 +47,8 @@ export const clientAPI = {
         return null
       })
   },
-  patch: async (url: string, data: Record<string, any>, headerOptions?: HeadersInit) => {
-    const headers = makeHttpHeaders(headerOptions)
+  patch: async (url: string, data: Record<string, any>, fetchOptions?: FetcherOptions) => {
+    const headers = makeHttpHeaders(fetchOptions)
     return fetch(makeUrl(url), { method: 'PATCH', headers, body: JSON.stringify(data) })
       .then(res => res.json())
       .catch(err => {
@@ -50,8 +56,8 @@ export const clientAPI = {
         return null
       })
   },
-  put: async (url: string, data: Record<string, any>, headerOptions?: HeadersInit) => {
-    const headers = makeHttpHeaders(headerOptions)
+  put: async (url: string, data: Record<string, any>, fetchOptions?: FetcherOptions) => {
+    const headers = makeHttpHeaders(fetchOptions)
     return fetch(makeUrl(url), { method: 'PUT', headers, body: JSON.stringify(data) })
       .then(res => res.json())
       .catch(err => {
