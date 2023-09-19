@@ -1,15 +1,15 @@
 "use client"
 
 import React, { FC } from "react"
+import { HeaderBreadcrumbs } from "@/components/HeaderBreadcrumbs"
 import { PrivatePageContainer } from "@/components/PrivatePageContainer"
 import { PrivatePageProps } from "@/modules/auth/withAuthorization"
-import { HeaderBreadcrumbs } from "@/components/HeaderBreadcrumbs"
 
-export const DashboardPage: FC<PrivatePageProps> = ({ session }) => {
+export const ClientsPage: FC<PrivatePageProps> = ({ session }) => {
   return (
     <PrivatePageContainer
-      breadcrumbs={<HeaderBreadcrumbs text="Overview" />}
-      heading="Dashboard Page"
+      breadcrumbs={<HeaderBreadcrumbs text="Clients" />}
+      heading="My Clients"
       session={session}
     >
       <div />
