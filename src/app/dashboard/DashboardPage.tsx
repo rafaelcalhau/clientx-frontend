@@ -1,11 +1,11 @@
 "use client"
 
-import React from "react";
+import React, { FC } from "react";
 import Link from "next/link"
 import Breadcrumbs from "@mui/joy/Breadcrumbs"
 import Typography from "@mui/joy/Typography"
 import { PrivatePageContainer } from "@/components/PrivatePageContainer";
-
+import { PrivatePageProps } from "@/modules/auth/withAuthorization";
 // Icons
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded'
@@ -31,11 +31,12 @@ const DashboardBreadcrumbs = () => (
   </Breadcrumbs>
 )
 
-export function DashboardPage () {
+export const DashboardPage: FC<PrivatePageProps> = ({ session }) => {
   return (
     <PrivatePageContainer
       breadcrumbs={<DashboardBreadcrumbs />}
       heading="Dashboard Page"
+      session={session}
     >
       <div />
     </PrivatePageContainer>

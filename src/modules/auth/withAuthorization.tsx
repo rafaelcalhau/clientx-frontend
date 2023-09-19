@@ -1,8 +1,12 @@
 import { ReactNode } from "react"
 import { redirect } from "next/navigation"
 import { getServerAuthSession } from "@/modules/auth/auth.utils"
+import { UserSession } from "./auth.interfaces"
 
-export async function withAuthorization (Page: () => ReactNode) {
+export interface PrivatePageProps {
+  session: UserSession
+}
+export async function withAuthorization (Page: (props: PrivatePageProps) => ReactNode) {
   const session = getServerAuthSession()
   const accessToken = session?.accessToken
 
@@ -10,5 +14,5 @@ export async function withAuthorization (Page: () => ReactNode) {
     return redirect('/signin')
   }
 
-  return <Page />
+  return <Page session={session} />
 }
