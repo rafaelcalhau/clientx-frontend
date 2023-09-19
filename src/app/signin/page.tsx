@@ -17,6 +17,8 @@ import { PublicPageContainer } from "@/components/PublicPageContainer"
 
 import type { SignInInputs } from "./signin.interfaces"
 
+const defaultSignInErrorMessage = 'An error has occurred in the signin request.'
+
 const SignInPage = () => {
   const {
     register,
@@ -39,9 +41,16 @@ const SignInPage = () => {
         if (data?.message) {
           setAuthenticationError(data.message)
           resetField('password')
+        } else if (data?.success) {
+          router.push('/dashboard')
         } else {
-          router.push('/')
+          setAuthenticationError(defaultSignInErrorMessage)
         }
+      })
+      .catch(err => {
+        console.error(err.message)
+        setAuthenticationError(defaultSignInErrorMessage)
+        resetField('password')
       })
       .finally(() => setIsAuthenticating(false))
   }

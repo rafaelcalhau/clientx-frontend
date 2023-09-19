@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { z } from "zod"
-
 import { clientAPI } from "@/modules/api"
 import { AUTH_SESSION_NAME } from "@/modules/auth/auth.constants"
 import { APIRoutes } from "@/shared/api.routes"
@@ -19,16 +18,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const signin = await clientAPI.post(APIRoutes.signin, data)
 
       if (signin?.message) {
-        return res.status(401).json(signin)
+        res.status(401).json(signin)
+      } else if (signin?.id) {
+        res
+          .setHeader(
+            "Set-Cookie",
+            `${AUTH_SESSION_NAME}=${JSON.stringify(signin)}; httpOnly=true; secure=${isProd}; maxAge=86400; path=/`
+          )
+          .status(200)
+          .json({ success: true })
+      } else {
+        res.status(503).json({ success: false, message: 'Sign In is unavailable at this moment.' })
       }
-
-      return res
-        .status(200)
-        .setHeader(
-          "Set-Cookie",
-          `${AUTH_SESSION_NAME}=${JSON.stringify(signin)}; httpOnly=true; secure=${isProd}; maxAge=86400; path=/`
-        )
-        .json({ ...signin, success: true })
     } catch (error) {
       console.log({ error });
       return res.status(500).json({ message: error instanceof Error ? error.message : error })
