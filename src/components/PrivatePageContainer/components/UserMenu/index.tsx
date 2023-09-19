@@ -21,16 +21,16 @@ export const UserMenu: FC<UserMenuProps> = ({ userName }) => {
   return (
     <Dropdown>
       <div className='relative'>
-        <MenuButton startDecorator={<UserIcon />} endDecorator={<ArrowDropDownIcon />}>
+        <MenuButton data-testid="usermenu-button" startDecorator={<UserIcon />} endDecorator={<ArrowDropDownIcon />}>
           {userName}
         </MenuButton>
         <Menu sx={{ minWidth: 140 }} popperOptions={{ placement: 'top-end' }}>
-          <MenuItem onClick={() => router.push('/profile')}>
+          <MenuItem data-testid="usermenu-item-profile" onClick={() => router.push('/profile')}>
             <div className='text-sm flex items-center'>
               <ProfileIcon sx={MENU_ICONS_STYLES} /> Profile
             </div>
           </MenuItem>
-          <MenuItem onClick={() => router.push('/logout')}>
+          <MenuItem data-testid="usermenu-item-logout" onClick={() => router.push('/logout')}>
             <div className='text-sm flex items-center'>
               <LogoutIcon sx={MENU_ICONS_STYLES} /> Logout
             </div>
