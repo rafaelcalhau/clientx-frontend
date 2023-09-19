@@ -3,9 +3,9 @@ import { Listing } from "./index"
 
 describe("Component <HeaderBreadcrumbs />", () => {
   it("should render a table with 3 header items", () => {
-    const Component = <div aria-label="Test">Test</div>
+    const component = () => <div aria-label="Test">Test</div>
     const { getByLabelText, getByTestId } = render(
-      <Listing columns={[{ label: "A" }, { label: "B" }, { component: () => Component }]} />
+      <Listing columns={[{ label: "A" }, { label: "B" }, { component }]} />
     )
 
     expect(getByLabelText('basic table')).toBeInTheDocument()
