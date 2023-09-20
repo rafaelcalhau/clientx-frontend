@@ -16,8 +16,9 @@ export const SidebarItem: FC<SidebarItemProps> = ({
   onClick,
   selected
 }) => (
-  <ListItem data-testid={`sidebar-item-${name.toLowerCase()}`}>
+  <ListItem>
     <ListItemButton
+      data-testid={`sidebar-item-${name.toLowerCase()}`}
       onClick={onClick}
       selected={selected}
     >

@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react"
+import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { sidebarNavigationOptions, Sidebar } from "./index"
 
@@ -12,13 +12,11 @@ describe("Component <Sidebar />", () => {
   const user = userEvent.setup()
 
   it("should render a container list with all expected items", async () => {
-    const { getAllByTestId, getByTestId } = render(
-      <Sidebar />
-    )
+    render(<Sidebar />)
 
-    expect(getAllByTestId('sidebar-item-name').length).toBe(4)
+    expect(screen.getAllByTestId('sidebar-item-name')).toHaveLength(4)
     await Promise.all(sidebarNavigationOptions.map(async ({ name, route }) => {
-      const item = getByTestId(`sidebar-item-${name.toLowerCase()}`).querySelector("[role='button']") as HTMLButtonElement
+      const item = screen.getByTestId(`sidebar-item-${name.toLowerCase()}`)
       expect(item).toBeInTheDocument()
       await user.click(item)
       expect(pushMock).toBeCalledWith(route)
