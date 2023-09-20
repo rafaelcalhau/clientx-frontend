@@ -1,3 +1,4 @@
 export interface FetcherOptions {
-  accessToken: string
+  accessToken?: string
+  isLocal?: boolean
 }

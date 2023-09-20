@@ -22,16 +22,18 @@ const makeUrl = (url: string) => {
 export const clientAPI = {
   delete: async (url: string, fetchOptions?: FetcherOptions) => {
     const headers = makeHttpHeaders(fetchOptions)
-    return fetch(makeUrl(url), { method: 'DELETE', headers })
+    const requestUrl = fetchOptions?.isLocal ? url : makeUrl(url)
+    return fetch(requestUrl, { method: 'DELETE', headers })
       .then(res => res.json())
       .catch(err => {
         console.error('@clientAPI, [DELETE], error', err.message)
         return null
       })
   },
-  get: async (url: string, fetchOptions?: FetcherOptions) => {
+  get: async <ReturnType>(url: string, fetchOptions?: FetcherOptions): Promise<ReturnType> => {
     const headers = makeHttpHeaders(fetchOptions)
-    return fetch(makeUrl(url), { method: 'GET', headers })
+    const requestUrl = fetchOptions?.isLocal ? url : makeUrl(url)
+    return fetch(requestUrl, { method: 'GET', headers })
       .then(res => res.json())
       .catch(err => {
         console.error('@clientAPI, [GET], error', err.message)
@@ -40,7 +42,8 @@ export const clientAPI = {
   },
   post: async (url: string, data: Record<string, any>, fetchOptions?: FetcherOptions) => {
     const headers = makeHttpHeaders(fetchOptions)
-    return fetch(makeUrl(url), { method: 'POST', headers, body: JSON.stringify(data) })
+    const requestUrl = fetchOptions?.isLocal ? url : makeUrl(url)
+    return fetch(requestUrl, { method: 'POST', headers, body: JSON.stringify(data) })
       .then(res => res.json())
       .catch(err => {
         console.error('@clientAPI, [POST], error', err.message)
@@ -49,7 +52,8 @@ export const clientAPI = {
   },
   patch: async (url: string, data: Record<string, any>, fetchOptions?: FetcherOptions) => {
     const headers = makeHttpHeaders(fetchOptions)
-    return fetch(makeUrl(url), { method: 'PATCH', headers, body: JSON.stringify(data) })
+    const requestUrl = fetchOptions?.isLocal ? url : makeUrl(url)
+    return fetch(requestUrl, { method: 'PATCH', headers, body: JSON.stringify(data) })
       .then(res => res.json())
       .catch(err => {
         console.error('@clientAPI, [PATCH], error', err.message)
@@ -58,7 +62,8 @@ export const clientAPI = {
   },
   put: async (url: string, data: Record<string, any>, fetchOptions?: FetcherOptions) => {
     const headers = makeHttpHeaders(fetchOptions)
-    return fetch(makeUrl(url), { method: 'PUT', headers, body: JSON.stringify(data) })
+    const requestUrl = fetchOptions?.isLocal ? url : makeUrl(url)
+    return fetch(requestUrl, { method: 'PUT', headers, body: JSON.stringify(data) })
       .then(res => res.json())
       .catch(err => {
         console.error('@clientAPI, [PUT], error', err.message)

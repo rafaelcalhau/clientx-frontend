@@ -10,7 +10,7 @@ export const DashboardPage: FC<PrivatePageProps> = ({ session }) => {
     <PrivatePageContainer
       breadcrumbs={<HeaderBreadcrumbs text="Overview" />}
       heading="Dashboard Page"
-      session={session}
+      userName={session.name}
     >
       <div />
     </PrivatePageContainer>

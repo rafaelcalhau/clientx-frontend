@@ -14,7 +14,6 @@ import { useRouter } from 'next/navigation'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { FormErrorText } from "@/components/FormErrorText"
 import { PublicPageContainer } from "@/components/PublicPageContainer"
-
 import type { SignInInputs } from "./signin.interfaces"
 
 const defaultSignInErrorMessage = 'An error has occurred in the signin request.'

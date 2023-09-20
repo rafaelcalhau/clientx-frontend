@@ -1,6 +1,5 @@
 import { FC, PropsWithChildren, ReactNode } from "react"
 import { CssBaseline, CssVarsProvider } from "@mui/joy"
-import { UserSession } from "@/modules/auth/auth.interfaces"
 import { getFirstName } from "@/shared/utils/getFirstName"
 import { theme } from "@/theme/default"
 import { Sidebar } from "./components/Sidebar"
@@ -9,13 +8,15 @@ import { UserMenu } from "./components/UserMenu"
 interface PrivatePageContainerProps {
   breadcrumbs: ReactNode
   heading: string
-  session: UserSession
+  headingExtra?: ReactNode
+  userName: string
 }
 export const PrivatePageContainer: FC<PropsWithChildren<PrivatePageContainerProps>> = ({
   breadcrumbs,
   children,
   heading,
-  session,
+  headingExtra,
+  userName,
 }) => {
   return (
     <CssVarsProvider theme={theme}>
@@ -27,12 +28,15 @@ export const PrivatePageContainer: FC<PropsWithChildren<PrivatePageContainerProp
         <div className="flex flex-col flex-grow min-h-screen">
           <div className="flex border-solid border-0 border-b border-slate-200 p-4 items-center justify-between">
             {breadcrumbs}
-            <UserMenu userName={getFirstName(session.name)} />
+            <UserMenu userName={getFirstName(userName)} />
           </div>
 
           <div className="container mx-auto">
             <div className="flex flex-col m-5">
-              <h2 data-testid="page-heading" className="my-3">{heading}</h2>
+              <div className="flex items-center justify-between">
+                <h2 data-testid="page-heading" className="my-3">{heading}</h2>
+                {headingExtra}
+              </div>
 
               {children}
             </div>

@@ -16,4 +16,13 @@ describe("Component <HeaderBreadcrumbs />", () => {
     expect(getByTestId('header-item-2')).toBeInTheDocument()
     expect(getByLabelText('Test')).toBeInTheDocument()
   })
+
+  it("should render a loading indicator when loading prop is true", () => {
+    const component = () => <div aria-label="Test">Test</div>
+    const { getByTestId } = render(
+      <Listing loading columns={[{ label: "A" }, { label: "B" }, { component }]} />
+    )
+
+    expect(getByTestId('listing-loader')).toBeInTheDocument()
+  })
 })
