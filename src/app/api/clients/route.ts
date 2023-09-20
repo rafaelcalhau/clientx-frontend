@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
 import { ZodError } from "zod"
 import { clientAPI } from "@/modules/api"
-import { AUTH_SESSION_NAME } from "@/modules/auth/auth.constants"
 import { getCookieSessionToken } from "@/modules/auth/auth.utils"
 import { DEFAULT_LISTING_ITEMS_LENGTH } from "@/shared/constants"
-import { newClientDto } from "./dto/newClientDto"
+import { newClientSchema } from "./clients.schemas"
 
 export async function GET(req: NextRequest) {
   try {
@@ -33,7 +32,7 @@ export async function POST(req: NextRequest) {
 
     if (accessToken) {
       const requestBody = await req.json()
-      const body = newClientDto.parse(requestBody)
+      const body = newClientSchema.parse(requestBody)
       const data = await clientAPI.post('/v1/clients', body, { accessToken })
       return NextResponse.json(data)
     } else {

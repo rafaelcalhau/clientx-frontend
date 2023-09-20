@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { FormEvent, useState } from "react"
 import Alert from "@mui/joy/Alert"
 import IconButton from "@mui/joy/IconButton"
 import Button from "@mui/joy/Button"
@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { FormErrorText } from "@/components/FormErrorText"
 import { PublicPageContainer } from "@/components/PublicPageContainer"
+import { clientAPI } from "@/modules/api"
 import type { SignInInputs } from "./signin.interfaces"
 
 const defaultSignInErrorMessage = 'An error has occurred in the signin request.'
@@ -30,12 +31,11 @@ const SignInPage = () => {
   const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false)
   const [authenticationError, setAuthenticationError] = useState<string>("")
 
-  const onSubmit: SubmitHandler<SignInInputs> = data => {
+  const onSubmit: SubmitHandler<SignInInputs> = async data => {
     setIsAuthenticating(true)
     setAuthenticationError('')
 
-    fetch('/api/signin', { method: 'POST', body: JSON.stringify(data) })
-      .then(result => result.json())
+    return clientAPI.post('/api/signin', data, { isLocal: true })
       .then(data => {
         if (data?.message) {
           setAuthenticationError(data.message)
@@ -58,10 +58,12 @@ const SignInPage = () => {
     <PublicPageContainer title="Sign In">
       <div className="flex flex-col items-center justify-center w-72">
         <Image alt="Logo" src="/logo-clientx.png" width={200} height={128} priority />
+
         <div className="flex flex-col mt-6 mb-6">
           <h2 className="h1">Sign in to your account</h2>
           <p>Welcome back</p>
         </div>
+
         {authenticationError.length > 0 && (
           <div className="mb-6">
             <Alert
@@ -78,7 +80,8 @@ const SignInPage = () => {
             </Alert>
           </div>
         )}
-        <form className="flex flex-col w-full mb-6 gap-3" onSubmit={handleSubmit(onSubmit)}>
+
+        <div className="flex flex-col w-full mb-6 gap-3">
           <FormControl required>
             <FormLabel>Email</FormLabel>
             <Input disabled={isAuthenticating} type="email" {...register("username", { required: true })} />
@@ -89,10 +92,10 @@ const SignInPage = () => {
             <Input disabled={isAuthenticating} type="password" {...register("password", { required: true })} />
             {errors.password && <FormErrorText>This field is required</FormErrorText>}
           </FormControl>
-          <Button loading={isAuthenticating} variant="solid" type="submit" fullWidth>
+          <Button fullWidth loading={isAuthenticating} variant="solid" onClick={handleSubmit(onSubmit)}>
             Sign in
           </Button>
-        </form>
+        </div>
       </div>
       <div className="text-sm">
         &copy; <a href="https://github.com/rafaelcalhau" target="_blank">github.com/rafaelcalhau</a>

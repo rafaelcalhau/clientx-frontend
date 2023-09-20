@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const newClientDto = z.object({
+export const newClientSchema = z.object({
   name: z.string(),
   email: z.string().email('Invalid email address.'),
 })
