@@ -84,7 +84,7 @@ export const ClientsPage: FC<PrivatePageProps> = ({ session }) => {
                 }
               </td>
               <td>
-                <IconButton onClick={() => router.push(`/client-profile/${client._id}`)}>
+                <IconButton onClick={() => router.push(`/clients/${client._id}`)}>
                   <BadgeIcon />
                 </IconButton>
               </td>
