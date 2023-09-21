@@ -1,5 +1,6 @@
 import { FC, PropsWithChildren, ReactNode } from "react"
 import { CssBaseline, CssVarsProvider } from "@mui/joy"
+import GitHubIcon from "@mui/icons-material/GitHub"
 import { getFirstName } from "@/shared/utils/getFirstName"
 import { theme } from "@/theme/default"
 import { Sidebar } from "./components/Sidebar"
@@ -31,7 +32,7 @@ export const PrivatePageContainer: FC<PropsWithChildren<PrivatePageContainerProp
             <UserMenu userName={getFirstName(userName)} />
           </div>
 
-          <div className="container mx-auto">
+          <div className="container flex flex-grow mx-auto">
             <div className="flex flex-col m-5">
               <div className="flex items-center justify-between">
                 <h2 data-testid="page-heading" className="my-3">{heading}</h2>
@@ -40,6 +41,13 @@ export const PrivatePageContainer: FC<PropsWithChildren<PrivatePageContainerProp
 
               {children}
             </div>
+          </div>
+
+          <div className="flex items-center justify-end p-3 text-sm">
+            <GitHubIcon sx={{ mr: 1 }} />
+            <a href="https://github.com/rafaelcalhau" target="_blank" className="hover:text-blue-900">
+              github.com/rafaelcalhau
+            </a>
           </div>
         </div>
       </div>
