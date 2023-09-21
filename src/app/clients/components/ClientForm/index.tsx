@@ -1,5 +1,5 @@
 import { FC } from "react"
-import { SubmitHandler, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import Button from "@mui/joy/Button"
 import FormControl from "@mui/joy/FormControl"
 import FormLabel from "@mui/joy/FormLabel"
@@ -8,17 +8,21 @@ import Stack from "@mui/joy/Stack"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FormErrorText } from "@/components/FormErrorText"
 import { clientFormSchema } from "./form.schema"
+import { ClientProfile } from "../../clients.interfaces"
+import { clientDto } from "./form.dtos"
 
 export type ClientFormValues = {
   name: string
   email: string
 }
 interface ClientFormProps {
+  data?: ClientProfile
   loading?: boolean
   onCancel: () => void
-  onSubmit: SubmitHandler<ClientFormValues>
+  onSubmit: (data: ClientFormValues, clientId?: string) => void
 }
 export const ClientForm: FC<ClientFormProps> = ({
+  data,
   loading,
   onCancel,
   onSubmit,
@@ -28,11 +32,14 @@ export const ClientForm: FC<ClientFormProps> = ({
     register,
     formState: { errors }
   } = useForm<ClientFormValues>({
+    defaultValues: data
+      ? clientDto.parse(data)
+      : { name: '', email: '' },
     resolver: zodResolver(clientFormSchema)
   })
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit((values) => onSubmit(values, data?._id))}>
       <Stack spacing={2}>
         <FormControl>
           <FormLabel aria-label="Name">Name</FormLabel>
@@ -78,7 +85,7 @@ export const ClientForm: FC<ClientFormProps> = ({
             loading={loading}
             type="submit"
           >
-            Register
+            {data?._id ? 'Save' : 'Register'}
           </Button>
         </div>
       </Stack>

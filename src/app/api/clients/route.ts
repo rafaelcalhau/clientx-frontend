@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
-import { ZodError } from "zod"
 import { clientAPI } from "@/modules/api"
 import { getCookieSessionToken } from "@/modules/auth/auth.utils"
 import { DEFAULT_LISTING_ITEMS_LENGTH } from "@/shared/constants"
-import { newClientSchema } from "./clients.schemas"
 
 export async function GET(req: NextRequest) {
   try {
@@ -22,27 +20,6 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ status: false, data: [] })
     }
   } catch (error) {
-    return NextResponse.json({ message: error })
-  }
-}
-
-export async function POST(req: NextRequest) {
-  try {
-    const accessToken = getCookieSessionToken(req)
-
-    if (accessToken) {
-      const requestBody = await req.json()
-      const body = newClientSchema.parse(requestBody)
-      const data = await clientAPI.post('/v1/clients', body, { accessToken })
-      return NextResponse.json(data)
-    } else {
-      return NextResponse.json({ error: true, message: 'Access token not found' })
-    }
-  } catch (error) {
-    if (error instanceof ZodError) {
-      return NextResponse.json({ message: error.issues.map(issue => issue.message).join('; ') })
-    }
-
     return NextResponse.json({ message: error })
   }
 }

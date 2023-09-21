@@ -48,7 +48,6 @@ export const ServicesPage: FC<PrivatePageProps> = ({ session }) => {
   const handleSaveService = async (data: ServiceFormValues, serviceId?: string) => {
     setIsRequesting(true)
     const fetcherOptions = { accessToken: session.accessToken }
-    console.log({ data, serviceId })
 
     try {
       const parsedData = serviceRequestDto.parse(data)
@@ -130,30 +129,28 @@ export const ServicesPage: FC<PrivatePageProps> = ({ session }) => {
       )}
 
       <Listing columns={columns} loading={isLoading}>
-        <tbody>
-          {data?.map(service => (
-            <tr key={service._id}>
-              <td>{service.name}</td>
-              <td>{service.description}</td>
-              <td>$ {service.basePrice}</td>
-              <td>{service.paymentCycle}</td>
-              <td>
-                {service.createdAt
-                  ? format(new Date(service.createdAt), "dd/MM/yyyy, HH'h'mm")
-                  : '-'
-                }
-              </td>
-              <td>
-                <IconButton
-                  disabled={isRequesting}
-                  onClick={() => handleEditService(service._id)}
-                >
-                  <EditIcon />
-                </IconButton>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+        {data?.map(service => (
+          <tr key={service._id}>
+            <td>{service.name}</td>
+            <td>{service.description}</td>
+            <td>$ {service.basePrice}</td>
+            <td>{service.paymentCycle}</td>
+            <td>
+              {service.createdAt
+                ? format(new Date(service.createdAt), "dd/MM/yyyy, HH'h'mm")
+                : '-'
+              }
+            </td>
+            <td>
+              <IconButton
+                disabled={isRequesting}
+                onClick={() => handleEditService(service._id)}
+              >
+                <EditIcon />
+              </IconButton>
+            </td>
+          </tr>
+        ))}
       </Listing>
       
       <Dialog
@@ -166,7 +163,7 @@ export const ServicesPage: FC<PrivatePageProps> = ({ session }) => {
         }
         subtitle={!selectedService
           ? "Register a new service to offer your clients."
-          : "Update the selected service's information."
+          : "Update the information of the selected service."
         }
       >
         <ServiceForm

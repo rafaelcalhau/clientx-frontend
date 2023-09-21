@@ -43,7 +43,11 @@ export const Listing: FC<PropsWithChildren<ListingProps>> = ({
           </tr>
         </tbody>
       )
-      : children
+      : (
+        <tbody>
+          {children}
+        </tbody>
+      )
     }
   </Table>
 )
