@@ -16,7 +16,7 @@ import { ListingColumns } from "@/components/Listing/interfaces"
 import { PrivatePageContainer } from "@/components/PrivatePageContainer"
 import { PrivatePageProps } from "@/modules/auth/withAuthorization"
 import { ClientListItem } from "./clients.interfaces"
-import { NewClientForm, NewClientFormValues } from "./components/NewClientForm"
+import { ClientForm, ClientFormValues } from "./components/ClientForm"
 import { clientAPI } from "@/modules/api"
 
 export const ClientsPage: FC<PrivatePageProps> = ({ session }) => {
@@ -38,7 +38,7 @@ export const ClientsPage: FC<PrivatePageProps> = ({ session }) => {
 
   const handleModalClose = () => setModalOpen(false)
 
-  const handleNewClient = async (data: NewClientFormValues) => {
+  const handleNewClient = async (data: ClientFormValues) => {
     setIsRequesting(true)
     return await clientAPI
       .post('/api/clients', data, { isLocal: true })
@@ -99,7 +99,7 @@ export const ClientsPage: FC<PrivatePageProps> = ({ session }) => {
         open={modalOpen}
         title="Add new Client"
       >
-        <NewClientForm
+        <ClientForm
           loading={isRequesting}
           onSubmit={handleNewClient}
           onCancel={handleModalClose}
