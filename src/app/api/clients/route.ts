@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
       )
       return NextResponse.json(data)
     } else {
-      return NextResponse.json({ status: false, data: [] })
+      return NextResponse.json([])
     }
   } catch (error) {
     return NextResponse.json({ message: error })

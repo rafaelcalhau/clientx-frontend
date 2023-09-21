@@ -130,7 +130,7 @@ export const ClientsPage: FC<PrivatePageProps> = ({ session }) => {
       )}
 
       <Listing columns={columns} loading={isLoading}>
-        {data?.map(client => (
+        {Array.isArray(data) && data.map(client => (
           <tr key={client._id}>
             <td>{client.name}</td>
             <td>{client.email}</td>

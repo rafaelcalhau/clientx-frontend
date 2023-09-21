@@ -129,7 +129,7 @@ export const ServicesPage: FC<PrivatePageProps> = ({ session }) => {
       )}
 
       <Listing columns={columns} loading={isLoading}>
-        {data?.map(service => (
+        {Array.isArray(data) && data.map(service => (
           <tr key={service._id}>
             <td>{service.name}</td>
             <td>{service.description}</td>
