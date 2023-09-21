@@ -3,6 +3,8 @@ import { clientAPI } from "@/modules/api"
 import { getCookieSessionToken } from "@/modules/auth/auth.utils"
 import { DEFAULT_LISTING_ITEMS_LENGTH } from "@/shared/constants"
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(req: NextRequest) {
   try {
     const accessToken = getCookieSessionToken(req)
