@@ -1,9 +1,8 @@
 "use client"
 
-import React, { FC, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { format } from "date-fns"
 import useSWR from "swr"
-import Alert from "@mui/joy/Alert"
 import Button from "@mui/joy/Button"
 import IconButton from "@mui/joy/IconButton"
 import AddIcon from "@mui/icons-material/Add"
@@ -13,6 +12,7 @@ import { Dialog } from "@/components/Dialog"
 import { HeaderBreadcrumbs } from "@/components/HeaderBreadcrumbs"
 import { Listing } from "@/components/Listing"
 import { ListingColumns } from "@/components/Listing/interfaces"
+import { PageError } from "@/components/PageError"
 import { PrivatePageContainer } from "@/components/PrivatePageContainer"
 import { PrivatePageProps } from "@/modules/auth/withAuthorization"
 import { clientAPI } from "@/modules/api"
@@ -25,6 +25,7 @@ export const ServicesPage: FC<PrivatePageProps> = ({ session }) => {
   const [isRequesting, setIsRequesting] = useState<boolean>(false)
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [page, setPage] = useState<number>(1)
+  const [pageError, setPageError] = useState<string>()
   const { data, isLoading, error, mutate: refetchServices } = useSWR(
     `/v1/services?page=${page}`,
     url => clientAPI.get<ServiceItem[]>(url, { accessToken: session.accessToken })
@@ -39,25 +40,72 @@ export const ServicesPage: FC<PrivatePageProps> = ({ session }) => {
     { label: '', style: { width: 60 } },
   ]
 
-  const handleModalClose = () => setModalOpen(false)
+  const handleModalClose = () => {
+    setSelectedService(undefined)
+    setModalOpen(false)
+  }
 
-  const handleNewService = async (data: ServiceFormValues) => {
+  const handleSaveService = async (data: ServiceFormValues, serviceId?: string) => {
     setIsRequesting(true)
+    const fetcherOptions = { accessToken: session.accessToken }
+    console.log({ data, serviceId })
 
     try {
       const parsedData = serviceRequestDto.parse(data)
-      await clientAPI
-        .post('/v1/services', parsedData, { accessToken: session.accessToken })
-        .then(result => {
-          if (result._id) refetchServices()
-          setModalOpen(false)
-        })
+      if (!serviceId) { // new service
+        await clientAPI
+          .post('/v1/services', parsedData, fetcherOptions)
+          .then(result => {
+            if (result._id) refetchServices()
+            setModalOpen(false)
+          })
+      } else { // update selected service
+        await clientAPI
+          .put(`/v1/services/${serviceId}`, parsedData, fetcherOptions)
+          .then(result => {
+            if (result._id) refetchServices()
+            setModalOpen(false)
+          })
+      }
+      
     } catch (error) {
       console.error(error)
     } finally {
       setIsRequesting(false)
     }
   }
+
+  const handleEditService = async (serviceId: string) => {
+    setIsRequesting(true)
+    
+    try {
+      await clientAPI
+        .get<ServiceItem>(
+          `/v1/services/${serviceId}`,
+          { accessToken: session.accessToken }
+        )
+        .then(result => {
+          if (result._id) {
+            setSelectedService(result)
+            setModalOpen(true)
+          } else {
+            setPageError("Service's data is not available.")
+          }
+        })
+    } catch (error) {
+      console.error(error)
+      setPageError("Service's data is not available.")
+      setModalOpen(false)
+    } finally {
+      setIsRequesting(false)
+    }
+  }
+
+  useEffect(() => {
+    if (error) {
+      setPageError("We are sorry! Something wrong just happened.")
+    }
+  }, [error])
 
   return (
     <PrivatePageContainer
@@ -74,10 +122,11 @@ export const ServicesPage: FC<PrivatePageProps> = ({ session }) => {
       }
       userName={session.name}
     >
-      {error && (
-        <Alert color="danger" variant="outlined">
-          We are sorry! Something wrong just happened.
-        </Alert>
+      {pageError && (
+        <PageError
+          message={pageError}
+          onClose={() => setPageError(undefined)}
+        />
       )}
 
       <Listing columns={columns} loading={isLoading}>
@@ -95,7 +144,10 @@ export const ServicesPage: FC<PrivatePageProps> = ({ session }) => {
                 }
               </td>
               <td>
-                <IconButton onClick={() => setSelectedService(service)}>
+                <IconButton
+                  disabled={isRequesting}
+                  onClick={() => handleEditService(service._id)}
+                >
                   <EditIcon />
                 </IconButton>
               </td>
@@ -120,7 +172,7 @@ export const ServicesPage: FC<PrivatePageProps> = ({ session }) => {
         <ServiceForm
           data={selectedService}
           loading={isRequesting}
-          onSubmit={handleNewService}
+          onSubmit={handleSaveService}
           onCancel={handleModalClose}
         />
       </Dialog>

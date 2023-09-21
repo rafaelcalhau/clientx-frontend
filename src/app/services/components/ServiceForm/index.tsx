@@ -25,7 +25,7 @@ interface ServiceFormProps {
   data?: ServiceItem
   loading?: boolean
   onCancel: () => void
-  onSubmit: SubmitHandler<ServiceFormValues>
+  onSubmit: (data: ServiceFormValues, serviceid?: string) => void
 }
 export const ServiceForm: FC<ServiceFormProps> = ({
   data,
@@ -39,6 +39,7 @@ export const ServiceForm: FC<ServiceFormProps> = ({
     handleSubmit,
     register,
     setValue,
+    watch,
   } = useForm<ServiceFormValues>({
     defaultValues: data
       ? serviceFormDto.parse(data)
@@ -47,7 +48,7 @@ export const ServiceForm: FC<ServiceFormProps> = ({
   })
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit((values => onSubmit(values, data?._id)))}>
       <Stack spacing={2}>
         <FormControl>
           <FormLabel aria-label="Name">Name</FormLabel>
@@ -83,7 +84,7 @@ export const ServiceForm: FC<ServiceFormProps> = ({
           <Controller
             name="basePrice"
             control={control}
-            render={({ field: { ref, ...otherProps } }) => (
+            render={({ field: { ref, onChange, ...otherProps } }) => (
               <NumericFormat
                 {...otherProps}
                 aria-invalid={errors.basePrice ? "true" : "false"}
@@ -94,7 +95,7 @@ export const ServiceForm: FC<ServiceFormProps> = ({
                 decimalSeparator=","
                 data-testid='form-field-baseprice'
                 onValueChange={
-                  content => content.floatValue && setValue('basePrice', String(content.floatValue))
+                  content => content.value && setValue('basePrice', String(content.value))
                 }
               />
             )}
