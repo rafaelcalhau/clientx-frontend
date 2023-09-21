@@ -78,4 +78,22 @@ describe("Component <ServiceForm />", () => {
     expect(screen.queryByTestId('field-error-baseprice')).not.toBeInTheDocument()
     expect(screen.queryByTestId('field-error-paymentcycle')).not.toBeInTheDocument()
   })
+
+  it("should the submit button have label 'Register' if service data does not exists", () => {
+    render(<ServiceForm onCancel={onCancel} onSubmit={onSubmit} />)
+    expect(screen.getByTestId('button-submit')).toHaveTextContent('Register')
+  })
+
+  it("should the submit button have label 'Save' if service data exists", () => {
+    const data: ServiceItem = {
+      _id: '0',
+      basePrice: 1,
+      description: 'Test',
+      name: 'Test',
+      paymentCycle: 'monthly',
+      createdAt: ''
+    }
+    render(<ServiceForm data={data} onCancel={onCancel} onSubmit={onSubmit} />)
+    expect(screen.getByTestId('button-submit')).toHaveTextContent('Save')
+  })
 })

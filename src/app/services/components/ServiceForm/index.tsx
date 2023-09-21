@@ -1,5 +1,5 @@
 import { FC } from "react"
-import { Controller, SubmitHandler, useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Button from "@mui/joy/Button"
 import FormControl from "@mui/joy/FormControl"
@@ -39,7 +39,6 @@ export const ServiceForm: FC<ServiceFormProps> = ({
     handleSubmit,
     register,
     setValue,
-    watch,
   } = useForm<ServiceFormValues>({
     defaultValues: data
       ? serviceFormDto.parse(data)
@@ -147,7 +146,7 @@ export const ServiceForm: FC<ServiceFormProps> = ({
             loading={loading}
             type="submit"
           >
-            Register
+            {data?._id ? 'Save' : 'Register'}
           </Button>
         </div>
       </Stack>
