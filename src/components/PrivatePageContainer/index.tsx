@@ -33,7 +33,7 @@ export const PrivatePageContainer: FC<PropsWithChildren<PrivatePageContainerProp
           </div>
 
           <div className="container flex flex-grow mx-auto">
-            <div className="flex flex-col m-5">
+            <div className="flex flex-col flex-grow m-5">
               <div className="flex items-center justify-between">
                 <h2 data-testid="page-heading" className="my-3">{heading}</h2>
                 {headingExtra}
