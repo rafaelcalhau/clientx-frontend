@@ -31,7 +31,7 @@ export const HeaderBreadcrumbs: FC<HeaderBreadcrumbsProps> = ({ extraPaths, text
       <span className="ml-1">Dashboard</span>
     </Link>
 
-    {extraPaths && extraPaths.map(({ icon: Icon, ...item }) => (
+    {extraPaths?.map(({ icon: Icon, ...item }) => (
       <Link
         key={item.label}
         color="neutral"
