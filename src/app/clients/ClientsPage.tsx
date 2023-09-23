@@ -4,6 +4,7 @@ import React, { FC, useEffect, useState } from "react"
 import { format } from "date-fns"
 import { useRouter } from "next/navigation"
 import useSWR from "swr"
+import Alert from "@mui/joy/Alert"
 import Button from "@mui/joy/Button"
 import IconButton from "@mui/joy/IconButton"
 import AddIcon from "@mui/icons-material/Add"
@@ -18,20 +19,39 @@ import { PageError } from "@/components/PageError"
 import { PrivatePageContainer } from "@/components/PrivatePageContainer"
 import { clientAPI } from "@/modules/api"
 import { PrivatePageProps } from "@/modules/auth/withAuthorization"
+import { DataListResponse } from "@/shared/interfaces"
+import { formatListingResponse } from "@/shared/utils/formatListingResponse"
 import { ClientListItem, ClientProfile } from "./clients.interfaces"
 import { ClientForm, ClientFormValues } from "./components/ClientForm"
 import { clientDto } from "./components/ClientForm/form.dtos"
 
-export const ClientsPage: FC<PrivatePageProps> = ({ session }) => {
+interface ClientsPageProps extends PrivatePageProps {
+  data: DataListResponse<ClientListItem>
+}
+export const ClientsPage: FC<ClientsPageProps> = ({
+  data: response,
+  session,
+}) => {
   const router = useRouter()
   const [selectedClient, setSelectedClient] = useState<ClientProfile>()
   const [isRequesting, setIsRequesting] = useState<boolean>(false)
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [page, setPage] = useState<number>(1)
   const [pageError, setPageError] = useState<string>()
-  const { data, isLoading, error, mutate: refetchClients } = useSWR(
+  const {
+    data: clients = response,
+    isLoading,
+    error,
+    mutate: refetchClients,
+  } = useSWR(
     `/api/clients?page=${page}`,
-    url => clientAPI.get<ClientListItem[]>(url, { isLocal: true })
+    url => clientAPI
+      .get<DataListResponse<ClientListItem>>(url, { isLocal: true })
+      .then(result => formatListingResponse(result)),
+    {
+      revalidateOnFocus: false,
+      revalidateOnMount: false
+    }
   )
 
   const columns: ListingColumns[] = [
@@ -40,6 +60,8 @@ export const ClientsPage: FC<PrivatePageProps> = ({ session }) => {
     { label: 'Registered at', style: { width: 160 }  },
     { label: '', style: { width: 90 } },
   ]
+
+  const hasClients = Array.isArray(clients?.data) && clients.data.length > 0
 
   const handleEditClient = async (clientid: string) => {
     setIsRequesting(true)
@@ -130,32 +152,40 @@ export const ClientsPage: FC<PrivatePageProps> = ({ session }) => {
       )}
 
       <Listing columns={columns} loading={isLoading}>
-        {Array.isArray(data) && data.map(client => (
-          <tr key={client._id}>
-            <td>{client.name}</td>
-            <td>{client.email}</td>
-            <td>
-              {client.createdAt
-                ? format(new Date(client.createdAt), "dd/MM/yyyy, HH'h'mm")
-                : '-'
-              }
-            </td>
-            <td>
-              <IconButton
-                disabled={isRequesting}
-                onClick={() => handleEditClient(client._id)}
-              >
-                <EditIcon />
-              </IconButton>
+        {hasClients
+          ? clients.data.map((client: ClientListItem) => (
+            <tr key={client._id}>
+              <td>{client.name}</td>
+              <td>{client.email}</td>
+              <td>
+                {client.createdAt
+                  ? format(new Date(client.createdAt), "dd/MM/yyyy, HH'h'mm")
+                  : '-'
+                }
+              </td>
+              <td>
+                <IconButton
+                  disabled={isRequesting}
+                  onClick={() => handleEditClient(client._id)}
+                >
+                  <EditIcon />
+                </IconButton>
 
-              <IconButton
-                onClick={() => router.push(`/clients/${client._id}`)}
-              >
-                <BadgeIcon />
-              </IconButton>
+                <IconButton
+                  onClick={() => router.push(`/clients/${client._id}`)}
+                >
+                  <BadgeIcon />
+                </IconButton>
+              </td>
+            </tr>
+          ))
+        : (
+          <tr>
+            <td colSpan={columns.length}>
+              <Alert>No data available.</Alert>
             </td>
           </tr>
-        ))}
+        )}
       </Listing>
       
       <Dialog
